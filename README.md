@@ -142,7 +142,7 @@ Because `x` and `y` are scaled by different dimensions, distances are calculated
 ## Roadmap
 
 - [x] **Step 1** — Camera feed, hand landmark detection, fingertip overlay, FPS counter
-- [ ] **Step 2** — Landmark extraction module (all 21 points in pixel space)
+- [x] **Step 2** — Landmark extraction module (all 21 points in pixel space)
 - [ ] **Step 3** — Geometric distance calculations and gesture detection
 - [ ] **Step 4** — OS input mapping (cursor movement, clicks)
 - [ ] **Step 5** — Smoothing and jitter reduction
@@ -155,6 +155,7 @@ Because `x` and `y` are scaled by different dimensions, distances are calculated
 AI_Hand_Gesture_Controller/
 ├── capture.py            # Camera loop + landmark detection
 ├── hand_landmarker.task  # MediaPipe model (downloaded, not committed)
+├── hand_tracker.py
 ├── .gitignore
 └── README.md
 ```
