@@ -144,8 +144,8 @@ Because `x` and `y` are scaled by different dimensions, distances are calculated
 - [x] **Step 1** — Camera feed, hand landmark detection, fingertip overlay, FPS counter
 - [x] **Step 2** — Landmark extraction module (all 21 points in pixel space)
 - [x] **Step 3** — Geometric distance calculations and gesture detection
-- [ ] **Step 4** — OS input mapping (cursor movement, clicks)
-- [ ] **Step 5** — Smoothing and jitter reduction
+- [x] **Step 4** — OS input mapping (cursor movement, clicks)
+- [x] **Step 5** — Smoothing and jitter reduction
 
 ---
 
