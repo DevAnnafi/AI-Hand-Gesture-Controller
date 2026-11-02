@@ -1,9 +1,17 @@
 import time
+
 import cv2
-from hand_tracker import HandTracker, INDEX_TIP
+
+from hand_tracker import HandTracker, INDEX_TIP, THUMB_TIP
+from gesture import PinchDetector
+
+GREEN = (0, 255, 0)
+RED = (0, 0, 255)
+FONT = cv2.FONT_HERSHEY_SIMPLEX
 
 cap = cv2.VideoCapture(0)
 tracker = HandTracker()
+pinch_detector = PinchDetector()
 prev_time = time.monotonic()
 
 while cap.isOpened():
@@ -20,13 +28,20 @@ while cap.isOpened():
     prev_time = curr_time
 
     if landmarks is not None:
-        for point in landmarks:
-            cv2.circle(frame, point, 4, (0, 0, 255), -1)
-        pixel_x, pixel_y = landmarks[INDEX_TIP]             # index fingertip
-        cv2.circle(frame, (pixel_x, pixel_y), 10, (0, 255, 0), -1)
-        print(f"index tip  pixel_x={pixel_x:4d}  pixel_y={pixel_y:4d}")
+        is_pinched, ratio, extended = pinch_detector.update(landmarks)
+        line_color = RED if is_pinched else GREEN
 
-    cv2.putText(frame, f"FPS: {fps:.0f}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
+        for point in landmarks:
+            cv2.circle(frame, point, 4, RED, -1)
+        cv2.line(frame, landmarks[THUMB_TIP], landmarks[INDEX_TIP], line_color, 3)
+        cv2.circle(frame, landmarks[INDEX_TIP], 10, GREEN, -1)
+
+        cv2.putText(frame, f"Ratio: {ratio:.2f}", (10, 60), FONT, 0.9, line_color, 2)
+        cv2.putText(frame, f"Extended: {extended}/3", (10, 90), FONT, 0.9, line_color, 2)
+    else:
+        pinch_detector.reset()                      # never keep a stale pinch
+
+    cv2.putText(frame, f"FPS: {fps:.0f}", (10, 30), FONT, 0.9, GREEN, 2)
 
     cv2.imshow("Gesture Controller", frame)
     if cv2.waitKey(1) & 0xFF == ord("q"):
